@@ -58,3 +58,17 @@ CREATE TABLE Tag (                        -- mapping of tags to topics
   topic integer REFERENCES Topic (id),    -- topic this was applied to
   PRIMARY KEY (text, topic)
 );
+
+CREATE TABLE OpinionVote ( -- vote on a users opinion on a certain topic
+  posted_by varchar REFERENCES Users,   -- who made this vote?
+  target varchar,          -- recipient of vote
+  arg_id integer,          -- id of argument where opinion was posted
+  arg_topic integer,       -- topic under wich argument exists
+  logic boolean,           -- thought opinion was logical
+  rage boolean,            -- thought opinion was rage-inducing
+
+  PRIMARY KEY (posted_by, target, arg_id, arg_topic),
+  -- a comment is associated with a single opinion
+  FOREIGN KEY (target, arg_id, arg_topic)
+    REFERENCES Opinion (posted_by, arg_id, arg_topic)
+);
