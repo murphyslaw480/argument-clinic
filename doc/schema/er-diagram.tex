@@ -1,0 +1,94 @@
+\documentclass[12pt]{article}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows, matrix, positioning, fit}
+
+\begin{document}
+\tikzstyle{relation} = [diamond, draw, fill=blue!20, text width=4em,
+  text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{attribute} = [draw, ellipse, fill=red!20, node distance=2.5cm,
+  minimum height=2em]
+\tikzstyle{entity} = [rectangle, draw, fill=blue!20, text width=5em,
+  text centered, minimum height=4em]
+\tikzstyle{relation-weak} = [diamond, double, draw, fill=blue!20, text width=4em,
+  text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{entity-weak} = [rectangle, draw, double, fill=blue!20, text width=5em,
+  text centered, minimum height=4em]
+\tikzstyle{line} = [draw, -, thick]
+\tikzstyle{arrow} = [draw, ->, thick]
+\tikzstyle{arrow-round} = [draw, -), thick]
+
+\setlength{\parindent}{0cm}
+\begin{figure}[H]
+  \caption{ER Diagram for Argument Clinic}
+\begin{tikzpicture}[node distance = 2cm, auto]
+  % Entities and Relations
+  \node [entity] (users) {users};
+  \node [entity, below=3cm of users] (topic) {topic};
+  \node [relation, below=1cm of topic] (topic2) {arg-topic};
+  \node [entity-weak, below=1cm of topic2] (argument) {argument};
+  \node [relation, right=1cm of argument] (about) {opinion-on};
+  \node [entity-weak, right=1cm of about](opinion) {opinion};
+  \node [relation, right=1cm of opinion] (on) {comment-on};
+  \node [entity-weak, right=1cm of on] (comment) {comment};
+  \node [relation, right=1cm of topic] (apply) {applied-to};
+  \node [entity, right=1cm of apply] (tag) {tag};
+  \node [relation, above=5cm of on] (post) {posted-by};
+
+  % Entities/Relations Paths
+  \path [line] (topic) |- (post);
+  \path [arrow-round] (topic2) -> (topic);
+  \path [line] (argument) -- (topic2);
+  \path [arrow-round] (about) -> (argument);
+  \path [line] (about) -- (opinion);
+  \path [arrow-round] (on) -> (opinion);
+  \path [line] (comment) -- (on);
+  \path [line] (tag) -- (apply);
+  \path [line] (topic) -- (apply);
+  \node [above = 1cm of opinion] (opnode) {};
+  \path [line] (opinion.north) -- (opnode.south);
+  \path [line] (opnode.south) -| (post.south);
+  \path [line] (comment) |- (post);
+  \path [arrow-round] (post) |- (users);
+
+  % Attributes
+  % Users
+  \node [attribute, below right=1cm and 1cm of users] (name) {\underline{name}};
+  \path [line] (users) -- (name);
+  \node [attribute, above =1cm and 1cm of users] (password) {password};
+  \path [line] (users) -- (password);
+  \node [attribute, above right=1cm and 1cm of users] (email) {email};
+  \path [line] (users) -- (email);
+
+  % Topic
+  \node [attribute, below right=1cm and 1cm of topic] (id) {\underline{id}};
+  \path [line] (topic) -- (id);
+
+  % Argument
+  \node [attribute, below left=1cm and 1cm of argument] (aid) {\underline{id}};
+  \path [line] (argument) -- (aid);
+  \node [attribute, below right=1cm and 1cm of argument] (sdate) {startdate};
+  \path [line] (argument) -- (sdate);
+  \node [attribute, below =1cm of argument] (edate) {enddate};
+  \path [line] (argument) -- (edate);
+
+  % Opinion
+  \node [attribute, below =0.5cm of opinion] (otext) {text};
+  \path [line] (opinion) -- (otext);
+
+  % Posted-by
+  \node [attribute, above right =1.5cm and 1.5cm of post] (pdate) {postdate};
+  \path [line] (post) -- (pdate);
+
+  % Comment
+  \node [attribute, below =1cm of comment] (ctext) {text};
+  \path [line] (comment) -- (ctext);
+\end{tikzpicture}
+\end{figure}
+
+\end{document}
