@@ -1,4 +1,4 @@
-argument-clinic
+![alt text](https://github.com/murphyslaw480/argument-clinic/raw/master/media/png/logo.png "Logo") argument-clinic 
 ===============
 
 This is a project for UF CIS4301 (Databases).
