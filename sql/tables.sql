@@ -1,4 +1,15 @@
-DROP TABLE IF EXISTS Users, Topic, Argument, Opinion, Comment;
+-- Clear out previous runs
+DROP TABLE IF EXISTS
+  Users,
+  Topic,
+  Argument,
+  Opinion,
+  Comment,
+  Tag,
+  OpinionVote,
+  CommentVote,
+CASCADE;
+
 --Entities
 CREATE TABLE Users (
   name varchar PRIMARY KEY,
@@ -60,15 +71,28 @@ CREATE TABLE Tag (                        -- mapping of tags to topics
 );
 
 CREATE TABLE OpinionVote ( -- vote on a users opinion on a certain topic
-  posted_by varchar REFERENCES Users,   -- who made this vote?
-  target varchar,          -- recipient of vote
+  voter varchar REFERENCES Users,   -- who made this vote?
+  opinion_poster varchar,          -- recipient of vote
   arg_id integer,          -- id of argument where opinion was posted
   arg_topic integer,       -- topic under wich argument exists
   logic boolean,           -- thought opinion was logical
   rage boolean,            -- thought opinion was rage-inducing
-
-  PRIMARY KEY (posted_by, target, arg_id, arg_topic),
+  PRIMARY KEY (voter, opinion_poster, arg_id, arg_topic),
   -- a comment is associated with a single opinion
-  FOREIGN KEY (target, arg_id, arg_topic)
+  FOREIGN KEY (opinion_poster, arg_id, arg_topic)
     REFERENCES Opinion (posted_by, arg_id, arg_topic)
+);
+
+CREATE TABLE CommentVote ( -- vote on a users comment on a certain opinion
+  voter varchar REFERENCES Users, -- who made this vote?
+  comment_poster varchar,             -- who made the comment
+  opinion_poster varchar,             -- who stated opinion comment was on
+  arg_id integer,                     -- argument where opinion was stated
+  arg_topic integer,                  -- topic of argument
+  logic boolean,                      -- thought comment was logical
+  rage boolean,                       -- thought comment was rage-inducing
+  PRIMARY KEY (voter, comment_poster, opinion_poster, arg_id, arg_topic),
+  -- a comment is associated with a single opinion
+  FOREIGN KEY (comment_poster, opinion_poster, arg_id, arg_topic)
+    REFERENCES Comment (posted_by, target, arg_id, arg_topic)
 );
