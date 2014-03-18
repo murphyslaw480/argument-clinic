@@ -66,6 +66,10 @@ CREATE TABLE Tag (                        -- mapping of tags to topics
   PRIMARY KEY (text, topic)
 );
 
+-- note about votes:
+-- when a vote is created, either logic or rage should be true.
+-- however, when a vote is undone such that logic = rage = false, that vote
+-- should be removed from the table (possibly using a trigger)
 CREATE TABLE OpinionVote ( -- vote on a users opinion on a certain topic
   voter varchar REFERENCES Users,   -- who made this vote?
   opinion_poster varchar,          -- recipient of vote
