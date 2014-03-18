@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 require 'date'
 require 'faker'
+require 'random-word'
 
 # limits on random time values
 $latest_time = Time.now
@@ -100,8 +101,8 @@ comment_gen = {
   "target" => proc {(ref_opinion = opinion.sample)["posted_by"]},
   "arg_id" => proc {ref_opinion["arg_id"]},
   "arg_topic" => proc {ref_opinion["arg_topic"]},
-  "postdate" => proc do 
-    arg_end = argument.find{|row| 
+  "postdate" => proc do
+    arg_end = argument.find{|row|
       row["id"] == ref_opinion["arg_id"]
       row["topic"] == ref_opinion["arg_topic"]
     }["enddate"]
@@ -110,8 +111,16 @@ comment_gen = {
 }
 comment = generate_table comment_gen, 10
 
+taglist = RandomWord.adjs.to_a.sample 10  # choose words to use for all tags
+tag_gen = {
+  "text" => proc {taglist.sample},
+  "topic" => proc {topic.sample["id"]},
+}
+tag = generate_table tag_gen, 10
+
 puts generate_insert_statements "Users", users
 puts generate_insert_statements "Topic", topic
 puts generate_insert_statements "Argument", argument
 puts generate_insert_statements "Opinion", opinion
 puts generate_insert_statements "Comment", comment
+puts generate_insert_statements "Tag", tag
