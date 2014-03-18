@@ -72,28 +72,46 @@ topic = generate_table topic_gen, 10
 
 # create Arguments
 arg_id = [0] * (topic.length + 1)   # argument id counters
-current_topic = nil                 # store referenced topic row
+ref_topic = nil                 # store referenced topic row
 tmpdate = nil                      # store startdate of current row
 argument_gen = {
-  "topic" => proc {(current_topic = topic.sample)["id"]},
-  "id" => proc {arg_id[current_topic["id"]] += 1},
-  "startdate" => proc {tmpdate = rand(current_topic["postdate"]..$latest_time)},
+  "topic" => proc {(ref_topic = topic.sample)["id"]},
+  "id" => proc {arg_id[ref_topic["id"]] += 1},
+  "startdate" => proc {tmpdate = rand(ref_topic["postdate"]..$latest_time)},
   "enddate" => proc {tmpdate + $argument_len}
 }
 argument = generate_table argument_gen, 10
 
 # create Opinons
-current_arg = nil                 # store referenced argument row
+ref_arg = nil                 # store referenced argument row
 opinion_gen = {
   "text" => proc {Faker::Lorem.sentence},
   "posted_by" => proc {users.sample["name"]},
-  "arg_id" => proc {(current_arg = argument.sample)["id"]},
-  "arg_topic" => proc {current_arg["topic"]},
-  "postdate" => proc {rand(current_arg["startdate"]..current_arg["enddate"])},
+  "arg_id" => proc {(ref_arg = argument.sample)["id"]},
+  "arg_topic" => proc {ref_arg["topic"]},
+  "postdate" => proc {rand(ref_arg["startdate"]..ref_arg["enddate"])},
 }
 opinion = generate_table opinion_gen, 10
+
+ref_opinion = nil                 # store referenced opinion row
+comment_gen = {
+  "text" => proc {Faker::Lorem.sentence},
+  "posted_by" => proc {users.sample["name"]},
+  "target" => proc {(ref_opinion = opinion.sample)["posted_by"]},
+  "arg_id" => proc {ref_opinion["arg_id"]},
+  "arg_topic" => proc {ref_opinion["arg_topic"]},
+  "postdate" => proc do 
+    arg_end = argument.find{|row| 
+      row["id"] == ref_opinion["arg_id"]
+      row["topic"] == ref_opinion["arg_topic"]
+    }["enddate"]
+    rand(ref_opinion["postdate"]..arg_end)
+  end
+}
+comment = generate_table comment_gen, 10
 
 puts generate_insert_statements "Users", users
 puts generate_insert_statements "Topic", topic
 puts generate_insert_statements "Argument", argument
 puts generate_insert_statements "Opinion", opinion
+puts generate_insert_statements "Comment", comment
