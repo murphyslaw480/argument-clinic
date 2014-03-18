@@ -42,8 +42,6 @@ CREATE TABLE Opinion (   -- one expession of opinion in an argument
   arg_id integer,                            -- argument instance where posted
   arg_topic integer,                         -- topic opinion is about
   postdate date NOT NULL,                    -- when it was posted
-  rage integer DEFAULT 0,                    -- rage score (voted by others)
-  logic integer DEFAULT 0,                   -- logic score (voted by others)
   PRIMARY KEY (posted_by, arg_id, arg_topic),
   -- an opinion must be associated with an argument
   FOREIGN KEY (arg_id, arg_topic) REFERENCES Argument (id, topic)
