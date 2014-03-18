@@ -5,6 +5,7 @@ require 'faker'
 # limits on random time values
 $latest_time = Time.now
 $earliest_time = $latest_time.to_date.prev_year.to_time
+$argument_len = 24 * 60 * 60  # an argument lasts a day
 
 #avoid warning from faker
 I18n.config.enforce_available_locales = true
@@ -31,7 +32,7 @@ end
 def format_value val
   case val
   when Time
-    "timetamp '#{val}'"
+    "timetamp '#{val.to_s.sub /\s-\d{4}$/, ''}'"  # add timestamp, strip zone
   when String
     "'#{val}'"
   else
@@ -72,14 +73,27 @@ topic = generate_table topic_gen, 10
 # create Arguments
 arg_id = [0] * (topic.length + 1)   # argument id counters
 current_topic = nil                 # store referenced topic row
-startdate = nil                     # store startdate of current row
+tmpdate = nil                      # store startdate of current row
 argument_gen = {
   "topic" => proc {(current_topic = topic.sample)["id"]},
   "id" => proc {arg_id[current_topic["id"]] += 1},
-  "startdate" => proc {rand(current_topic["postdate"]..$latest_time)}
+  "startdate" => proc {tmpdate = rand(current_topic["postdate"]..$latest_time)},
+  "enddate" => proc {tmpdate + $argument_len}
 }
 argument = generate_table argument_gen, 10
+
+# create Opinons
+current_arg = nil                 # store referenced argument row
+opinion_gen = {
+  "text" => proc {Faker::Lorem.sentence},
+  "posted_by" => proc {users.sample["name"]},
+  "arg_id" => proc {(current_arg = argument.sample)["id"]},
+  "arg_topic" => proc {current_arg["topic"]},
+  "postdate" => proc {rand(current_arg["startdate"]..current_arg["enddate"])},
+}
+opinion = generate_table opinion_gen, 10
 
 puts generate_insert_statements "Users", users
 puts generate_insert_statements "Topic", topic
 puts generate_insert_statements "Argument", argument
+puts generate_insert_statements "Opinion", opinion
