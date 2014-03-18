@@ -118,9 +118,34 @@ tag_gen = {
 }
 tag = generate_table tag_gen, 10
 
+ref_opinion = nil                 # store referenced opinion row
+opinionvote_gen = {
+  "voter" => proc {users.sample["name"]},
+  "opinion_poster" => proc {(ref_opinion = opinion.sample)["posted_by"]},
+  "arg_id" => proc {ref_opinion["arg_id"]},
+  "arg_topic" => proc {ref_opinion["arg_topic"]},
+  "logic" => proc {[true, false].sample},
+  "rage" => proc {[true, false].sample}
+}
+opinionvote= generate_table opinionvote_gen, 10
+
+ref_comment = nil                 # store referenced comment row
+commentvote_gen = {
+  "voter" => proc {users.sample["name"]},
+  "comment_poster" => proc {(ref_comment = comment.sample)["posted_by"]},
+  "opinion_poster" => proc {ref_comment["target"]},
+  "arg_id" => proc {ref_comment["arg_id"]},
+  "arg_topic" => proc {ref_comment["arg_topic"]},
+  "logic" => proc {[true, false].sample},
+  "rage" => proc {[true, false].sample}
+}
+commentvote= generate_table commentvote_gen, 10
+
 puts generate_insert_statements "Users", users
 puts generate_insert_statements "Topic", topic
 puts generate_insert_statements "Argument", argument
 puts generate_insert_statements "Opinion", opinion
 puts generate_insert_statements "Comment", comment
 puts generate_insert_statements "Tag", tag
+puts generate_insert_statements "OpinionVote", opinionvote
+puts generate_insert_statements "CommentVote", commentvote
