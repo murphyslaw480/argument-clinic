@@ -53,9 +53,10 @@ def generate_insert_statements table_name, table
 end
 
 # create Users
+ref_name = ""   # store name generated for row to use in email address
 users_gen = {
-  "name" => proc {Faker::Internet.user_name},
-  "email" => proc {Faker::Internet.email},
+  "name" => proc {ref_name = Faker::Internet.user_name},
+  "email" => proc {Faker::Internet.email ref_name},
   "password" => proc {Faker::Internet.password}
 }
 users = remove_duplicates(generate_table(users_gen, 10), %w{name})
