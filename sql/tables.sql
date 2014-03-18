@@ -54,8 +54,6 @@ CREATE TABLE Comment (    -- comment on an opinion
   arg_id integer,                            -- argument based on statement
   arg_topic integer,                         -- statement where posted
   postdate date NOT NULL,                    -- when it was posted
-  rage integer DEFAULT 0,                    -- rage score (voted by others)
-  logic integer DEFAULT 0,                   -- logic score (voted by others)
   PRIMARY KEY (posted_by, target, arg_id, arg_topic),
   -- a comment is associated with a single opinion
   FOREIGN KEY (target, arg_id, arg_topic)
