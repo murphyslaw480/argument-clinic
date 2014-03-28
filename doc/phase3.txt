@@ -1,0 +1,42 @@
+Phase 3 --- Between now and April 4th.
+Worth 50 points.
+
+As mentioned in class you should be building the backend of your application first.
+Phase three will test the development of your database backend. 
+For phase three your assignment is to demonstrate and justify the queries that
+drive your applications.
+
+Each group will need to select a 10 minuite meeting time with the TAs or graders.
+You should do this early as the TA's time is limited.
+Each group member should attend this meeting but only one is necessary.
+
+At the TA meeting you will be asked to explain your application's database
+and demonstrate the following capabilities:
+
+- [ ] Select (10 pts)
+
+- [ ] Join (10 pts)
+
+- [ ] Aggregate (10 pts)
+
+- [ ] Views (10 pts)
+
+- [ ] Indexes (10 pts)
+
+
+There are other catefories of queries that TAs will be looking for 
+to award extra credit points.
+TAs will be grading on working functionality.
+
+As part of your demonstration, you should explain how each of these properties
+are used as part of your application. This process should not take longer than
+10 minutes.
+
+After your demonstration, the TA will create a team github repository for your
+application. You will host the code associated with your website on this github.com
+repository.
+
+Within the next 2 days, the TAs will set up times slots for teams to signup. These slots are limited so sign up
+early. You should be having regular meetings with each of your group members developing
+the application. Do not wait until this deadline to start researching the front end
+application!
