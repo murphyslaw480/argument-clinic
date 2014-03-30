@@ -63,7 +63,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 -- Tally up the logic score for a particular argument
-CREATE OR REPLACE FUNCTION argument_rage(arg_id integer, arg_topic integer)
+CREATE OR REPLACE FUNCTION argument_logic(arg_id integer, arg_topic integer)
 RETURNS bigint
 AS $$
   select count(*)
@@ -85,7 +85,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 -- Tally up the logic score for a particular topic
-CREATE OR REPLACE FUNCTION topic_logic(arg_topic integer)
+CREATE OR REPLACE FUNCTION topic_logic(topic_id integer)
 RETURNS bigint
 AS $$
   select count(*)
@@ -95,7 +95,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 -- Tally up the rage score for a particular topic
-CREATE OR REPLACE FUNCTION topic_rage(arg_topic integer)
+CREATE OR REPLACE FUNCTION topic_rage(topic_id integer)
 RETURNS bigint
 AS $$
   select count(*)
